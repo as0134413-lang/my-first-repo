@@ -1,0 +1,1 @@
+def get_issue_details(issue_id):
