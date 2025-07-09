@@ -1,0 +1,37 @@
+name: Validate AI-ACT Scan (Phase 1 - Private)
+
+on:
+  pull_request:
+    branches:
+      - validate-mvp
+      - main
+  push:
+    branches:
+      - validate-mvp
+
+permissions:
+  contents: read
+
+jobs:
+  scan:
+    name: Run local scan (no API)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout host repo
+        uses: actions/checkout@v3
+
+      - name: Checkout AI-ACT Action code (private)
+        uses: actions/checkout@v3
+        with:
+          repository: Lab700xOrg/ai-act-score-action
+          token: ${{ secrets.ACTION_REPO_PAT }}
+          path: action-src
+
+      - name: Run local scan
+        id: scan
+        uses: ./action-src
+
+      - name: "Debug: show output"
+        run: |
+          echo "→ Risk tier: ${{ steps.scan.outputs['risk-tier'] }}"
