@@ -1,0 +1,23 @@
+name: Validate AI-ACT Scan (Phase 1)
+
+on:
+  pull_request:
+    branches: [ validate-mvp, main ]
+  push:
+    branches: [ validate-mvp ]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run local scan
+        id: scan
+        uses: Lab700xOrg/ai-act-score-action@v0.1.0
+        # no `with:` needed—`path` defaults to "."
+
+      - name: "Debug: show output"
+        run: |
+          echo "→ Risk tier: ${{ steps.scan.outputs['risk-tier'] }}"
