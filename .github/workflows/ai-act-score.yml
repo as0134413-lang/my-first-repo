@@ -1,22 +1,36 @@
-name: Validate AI-ACT Scan (Phase 1)
+name: Validate AI-ACT Scan (Phase 1 - Private)
 
 on:
   pull_request:
-    branches: [ validate-mvp, main ]
+    branches:
+      - validate-mvp
+      - main
   push:
-    branches: [ validate-mvp ]
+    branches:
+      - validate-mvp
+
+permissions:
+  contents: read
 
 jobs:
   scan:
+    name: Run local scan (no API)
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      - name: Checkout host repo
         uses: actions/checkout@v3
+
+      - name: Checkout AI-ACT Action code (private)
+        uses: actions/checkout@v3
+        with:
+          repository: Lab700xOrg/ai-act-score-action
+          token: ${{ secrets.GITHUB_TOKEN }}
+          path: action-src
 
       - name: Run local scan
         id: scan
-        uses: Lab700xOrg/ai-act-score-action@v0.1.0
-        # no `with:` needed—`path` defaults to "."
+        uses: ./action-src
 
       - name: "Debug: show output"
         run: |
