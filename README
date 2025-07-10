@@ -1,1 +1,6 @@
-Hello World!
+## Usage  
+```bash
+npm start        # démarre le serveur en local  
+npm test         # lance les tests unitaires  
+npm run build    # génère la version de production  
+
