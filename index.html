@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقع ابوالعينين  QR</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <style>
+        :root {
+            --primary: #003366;
+            --accent: #0bf050;
+            --light: #f8f9fa;
+            --dark: #0bf535;
+            --gray: #6c757d;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        /* الهيدر */
+        header {
+            background: linear-gradient(135deg, var(--primary), #002244);
+            color: white;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo-icon {
+            background: var(--accent);
+            width: 45px;
+            height: 45px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(255, 107, 53, 0.3);
+        }
+        
+        .logo h1 {
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+            margin: 0 40px;
+        }
+        
+        nav a {
+            color: rgba(255, 255, 255, 0.85);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover, nav a.active {
+            color: white;
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .cta-button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.4);
+        }
+        
+        .cta-button:hover {
+            background: #e55e2c;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.5);
+        }
+        
+        /* المحتوى الرئيسي */
+        main {
+            display: grid;
+            grid-template-columns: 280px 1fr 280px;
+            gap: 25px;
+            padding: 30px 5%;
+        }
+        
+        .sidebar {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            height: fit-content;
+        }
+        
+        .sidebar h2 {
+            color: var(--primary);
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #f0f4f8;
+            font-size: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 22px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        input[type="text"], 
+        input[type="color"], 
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 15px;
+            transition: border 0.3s;
+        }
+        
+        input[type="text"]:focus, 
+        input[type="color"]:focus {
+            border-color: var(--accent);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        
+        .color-picker {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .color-picker div {
+            flex: 1;
+        }
+        
+        .file-upload {
+            border: 2px dashed #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--accent);
+            background: rgba(255, 107, 53, 0.03);
+        }
+        
+        .file-upload i {
+            font-size: 28px;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .preview-area {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            min-height: 600px;
+        }
+        
+        .phone-mockup {
+            width: 320px;
+            height: 600px;
+            background: linear-gradient(145deg, #1e293b, #0f172a);
+            border-radius: 40px;
+            padding: 25px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+        
+        .phone-screen {
+            background: white;
+            border-radius: 25px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100%;
+            position: relative;
+        }
+        
+        .qr-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        #qr-preview {
+            max-width: 100%;
+            max-height: 100%;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .download-options {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+        }
+        
+        .download-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .download-btn i {
+            font-size: 18px;
+        }
+        
+        .download-btn.primary {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+        
+        .download-btn.secondary {
+            background: #edf2f7;
+            color: var(--gray);
+            border: 1px solid #e2e8f0;
+        }
+        
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* السايدبار الأيمن */
+        .social-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-card {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .social-card:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
+        }
+        
+        .social-card:hover .social-name {
+            color: white;
+        }
+        
+        .social-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 20px;
+        }
+        
+        .facebook { background: #e0f2fe; color: #0284c7; }
+        .instagram { background: #fef2f2; color: #dc2626; }
+        .whatsapp { background: #dcfce7; color: #16a34a; }
+        .linkedin { background: #dbeafe; color: #1d4ed8; }
+        
+        .social-card:hover .facebook { background: #0284c7; color: white; }
+        .social-card:hover .instagram { background: #dc2626; color: white; }
+        .social-card:hover .whatsapp { background: #16a34a; color: white; }
+        .social-card:hover .linkedin { background: #1d4ed8; color: white; }
+        
+        .search-box {
+            position: relative;
+            margin-top: 25px;
+        }
+        
+        .search-box input {
+            padding-left: 45px;
+        }
+        
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+        }
+        
+        /* الفوتر */
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 5% 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 18px;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 2px;
+            background: var(--accent);
+        }
+        
+        .footer-links {
+            list-style: none;
+        }
+        
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-links a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .footer-links a:hover {
+            color: white;
+            padding-left: 5px;
+        }
+        
+        .social-footer {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-footer a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            transition: all 0.3s;
+        }
+        
+        .social-footer a:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+        }
+        
+        /* الإستجابة للشاشات الصغيرة */
+        @media (max-width: 1200px) {
+            main {
+                grid-template-columns: 250px 1fr 250px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            main {
+                grid-template-columns: 1fr;
+                grid-template-areas: 
+                    "preview"
+                    "left"
+                    "right";
+            }
+            
+            .sidebar.left { grid-area: left; }
+            .preview-area { grid-area: preview; }
+            .sidebar.right { grid-area: right; }
+            
+            nav ul {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .footer-content {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .phone-mockup {
+                width: 280px;
+                height: 520px;
+                border-radius: 30px;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-options {
+                flex-direction: column;
+            }
+            
+            .social-links {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- الهيدر -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            <h1>مولد QR كود</h1>
+        </div>
+        
+        <nav>
+            <ul>
+                <li><a href="#" class="active">الرئيسية</a></li>
+                <li><a href="#">قوالب جاهزة</a></li>
+                <li><a href="#">مكتبة الرموز</a></li>
+                <li><a href="#">مساعدة</a></li>
+                <li><a href="#">تسجيل الدخول</a></li>
+            </ul>
+        </nav>
+        
+        <button class="cta-button">
+            <i class="fas fa-bolt"></i> ابدأ بإنشاء QR كود
+        </button>
+    </header>
+
+    <!-- المحتوى الرئيسي -->
+    <main>
+        <!-- السايدبار الأيسر -->
+        <aside class="sidebar left">
+            <h2>تخصيص QR كود</h2>
+            
+            <div class="form-group">
+                <label for="qr-text">النص أو الرابط</label>
+                <input type="text" id="qr-text" placeholder="أدخل النص أو الرابط هنا" value="https://example.com">
+            </div>
+            
+            <div class="form-group">
+                <label>لون الخلفية</label>
+                <div class="color-picker">
+                    <div>
+                        <input type="color" id="bg-color" value="#ffffff">
+                    </div>
+                    <div>
+                        <input type="text" id="bg-hex" value="#ffffff">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>لون QR كود</label>
+                <div class="color-picker">
+                    <div>
+                        <input type="color" id="qr-color" value="#003366">
+                    </div>
+                    <div>
+                        <input type="text" id="qr-hex" value="#003366">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="logo-upload">إضافة شعار</label>
+                <div class="file-upload" id="logo-upload">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <p>انقر لتحميل صورة</p>
+                    <small>الحد الأقصى 2MB - PNG, JPG</small>
+                    <input type="file" id="logo-input" accept="image/*" style="display: none;">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="qr-size">حجم QR كود</label>
+                <select id="qr-size">
+                    <option value="300">300 × 300 بكسل</option>
+                    <option value="400">400 × 400 بكسل</option>
+                    <option value="500">500 × 500 بكسل</option>
+                </select>
+            </div>
+            
+            <button id="generate-btn" class="cta-button" style="width: 100%; margin-top: 10px;">
+                <i class="fas fa-sync-alt"></i> تحديث المعاينة
+            </button>
+        </aside>
+
+        <!-- منطقة المعاينة -->
+        <section class="preview-area">
+            <div class="phone-mockup">
+                <div class="phone-screen">
+                    <div class="qr-container">
+                        <canvas id="qr-preview" width="300" height="300"></canvas>
+                    </div>
+                    
+                    <div class="download-options">
+                        <div class="download-btn primary" id="download-png">
+                            <i class="fas fa-download"></i> تنزيل كـ PNG
+                        </div>
+                        <div class="download-btn secondary" id="download-svg">
+                            <i class="fas fa-download"></i> تنزيل كـ SVG
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- السايدبار الأيمن -->
+        <aside class="sidebar right">
+            <h2>الروابط الاجتماعية</h2>
+            
+            <div class="social-links">
+                <div class="social-card">
+                    <div class="social-icon facebook">
+                        <i class="fab fa-facebook-f"></i>
+                    </div>
+                    <div class="social-name">فيسبوك</div>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon instagram">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <div class="social-name">إنستجرام</div>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="social-name">واتساب</div>
+                </div>
+                
+                <div class="social-card">
+                    <div class="social-icon linkedin">
+                        <i class="fab fa-linkedin-in"></i>
+                    </div>
+                    <div class="social-name">لينكدإن</div>
+                </div>
+            </div>
+            
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="بحث في القوالب...">
+            </div>
+            
+            <div class="form-group" style="margin-top: 30px;">
+                <label>القوالب الموصى بها</label>
+                <div class="template-suggestions">
+                    <div style="display: flex; gap: 10px; margin-top: 10px;">
+                        <div style="width: 60px; height: 60px; background: #e0f2fe; border-radius: 10px;"></div>
+                        <div style="width: 60px; height: 60px; background: #f0f9ff; border-radius: 10px;"></div>
+                        <div style="width: 60px; height: 60px; background: #dbeafe; border-radius: 10px;"></div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- الفوتر -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h3>عن الموقع</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> من نحن</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> فريق العمل</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> فرص العمل</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> شركاء النجاح</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>الدعم الفني</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> مركز المساعدة</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> الأسئلة الشائعة</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> سياسة الخصوصية</a></li>
+                    <li><a href="#"><i class="fas fa-chevron-left"></i> شروط الاستخدام</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>تواصل معنا</h3>
+                <ul class="footer-links">
+                    <li><a href="#"><i class="fas fa-envelope"></i> support@qrcode.com</a></li>
+                    <li><a href="#"><i class="fas fa-phone"></i> +966 50 123 4567</a></li>
+                    <li><a href="#"><i class="fab fa-whatsapp"></i> الدردشة المباشرة</a></li>
+                    <li><a href="#"><i class="fas fa-map-marker-alt"></i> الرياض، المملكة العربية السعودية</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3>تابعنا</h3>
+                <p style="color: rgba(255, 255, 255, 0.7); margin-bottom: 15px;">
+                    اشترك في النشرة الإخبارية للحصول على آخر التحديثات
+                </p>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <input type="email" placeholder="بريدك الإلكتروني" style="flex: 1; padding: 10px; border-radius: 8px; border: none;">
+                    <button class="cta-button" style="padding: 0 15px;">إرسال</button>
+                </div>
+                <div class="social-footer">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="copyright">
+            &copy; ابو العينين QR كود. جميع الحقوق محفوظة.
+        </div>
+    </footer>
+
+    <script>
+        // تحديث أكواد الألوان
+        document.getElementById('bg-color').addEventListener('input', function() {
+            document.getElementById('bg-hex').value = this.value;
+            generateQR();
+        });
+        
+        document.getElementById('bg-hex').addEventListener('input', function() {
+            document.getElementById('bg-color').value = this.value;
+            generateQR();
+        });
+        
+        document.getElementById('qr-color').addEventListener('input', function() {
+            document.getElementById('qr-hex').value = this.value;
+            generateQR();
+        });
+        
+        document.getElementById('qr-hex').addEventListener('input', function() {
+            document.getElementById('qr-color').value = this.value;
+            generateQR();
+        });
+        
+        // تحميل الشعار
+        document.getElementById('logo-upload').addEventListener('click', function() {
+            document.getElementById('logo-input').click();
+        });
+        
+        document.getElementById('logo-input').addEventListener('change', function() {
+            if (this.files && this.files[0]) {
+                const fileName = this.files[0].name;
+                document.querySelector('.file-upload p').textContent = fileName;
+                generateQR();
+            }
+        });
+        
+        // إنشاء QR كود
+        function generateQR() {
+            const qrText = document.getElementById('qr-text').value;
+            const bgColor = document.getElementById('bg-color').value;
+            const qrColor = document.getElementById('qr-color').value;
+            const size = document.getElementById('qr-size').value;
+            const canvas = document.getElementById('qr-preview');
+            const ctx = canvas.getContext('2d');
+            
+            // تغيير حجم الكانفاس
+            canvas.width = size;
+            canvas.height = size;
+            
+            // مسح الكانفاس
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            if (qrText) {
+                // إنشاء QR كود
+                QRCode.toCanvas(canvas, qrText, {
+                    width: size,
+                    color: {
+                        dark: qrColor,
+                        light: bgColor
+                    }
+                }, function (error) {
+                    if (error) console.error(error);
+                    
+                    // إضافة الشعار إذا كان موجودًا
+                    const logoInput = document.getElementById('logo-input');
+                    if (logoInput.files && logoInput.files[0]) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const img = new Image();
+                            img.onload = function() {
+                                const logoSize = size * 0.25;
+                                const x = (size - logoSize) / 2;
+                                const y = (size - logoSize) / 2;
+                                ctx.drawImage(img, x, y, logoSize, logoSize);
+                            };
+                            img.src = e.target.result;
+                        };
+                        reader.readAsDataURL(logoInput.files[0]);
+                    }
+                });
+            }
+        }
+        
+        // تنزيل الصورة
+        document.getElementById('download-png').addEventListener('click', function() {
+            const canvas = document.getElementById('qr-preview');
+            const link = document.createElement('a');
+            link.download = 'qr-code.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        });
+        
+        // تحديث المعاينة عند الضغط
+       document.getElementById('download-svg').addEventListener('click', function () {
+    const qrText = document.getElementById('qr-text').value;
+    const bgColor = document.getElementById('bg-color').value;
+    const qrColor = document.getElementById('qr-color').value;
+
+    QRCode.toString(qrText, {
+        type: 'svg',
+        color: {
+            dark: qrColor,
+            light: bgColor
+        }
+    }, function (err, svgString) {
+        if (err) return console.error(err);
+        const blob = new Blob([svgString], { type: 'image/svg+xml' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'qr-code.svg';
+        link.click();
+        URL.revokeObjectURL(url);
+    });
+});
+        // تفعيل الروابط الاجتماعية
+        document.querySelectorAll('.social-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const serviceName = this.querySelector('.social-name').textContent;
+                document.getElementById('qr-text').value = `https://www.${serviceName.toLowerCase()}.com/yourprofile`;
+                generateQR();
+            });
+        });
+        
+        // توليد أولي
+        window.onload = generateQR;
+    </script>
+</body>
+</html>
